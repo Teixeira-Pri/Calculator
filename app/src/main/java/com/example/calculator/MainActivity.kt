@@ -3,6 +3,7 @@ package com.example.calculator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
+import net.objecthunter.exp4j.ExpressionBuilder
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         number_8.setOnClickListener { numberPressed("8", true) }
         number_9.setOnClickListener { numberPressed("9", true) }
         number_0.setOnClickListener { numberPressed("0", true) }
+        btn_point.setOnClickListener { numberPressed(".", true) }
 
         btn_sum.setOnClickListener { numberPressed("+", false) }
         btn_multiplication.setOnClickListener { numberPressed("*",false) }
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         clean_data.setOnClickListener {
             expressao.text = ""
-            resultado.text = ""
+            txt_resultado.text = ""
         }
 
         backspace.setOnClickListener {
@@ -36,23 +38,41 @@ class MainActivity : AppCompatActivity() {
             val digit = expressao.text.toString()
 
             if (digit.isNotBlank()) {
-                expressao.text = digit.substring(0,digit.length-1)
+                expressao.text = digit.substring(0,digit.length - 1)
             }
-            resultado.text = ""
+            txt_resultado.text = ""
+        }
+
+        btn_equal.setOnClickListener {
+
+           try {
+                val expressao = ExpressionBuilder(expressao.text.toString()).build()
+
+                val resultado = expressao.evaluate()
+                val longResult = resultado.toLong()
+
+                if (resultado == longResult.toDouble())
+                    txt_resultado.text = longResult.toString()
+                else
+                    txt_resultado.text = resultado.toString()
+
+            } catch (e: Exception){
+
+            }
         }
     }
 
     private fun numberPressed(string: String, backspace: Boolean){
-        if(expressao.text.isNotEmpty()){
-            resultado.text = ""
+        if(txt_resultado.text.isNotEmpty()){
+            expressao.text = ""
         }
         if (backspace){
-            expressao.text = ""
-            resultado.append(string)
+            txt_resultado.text = ""
+            expressao.append(string)
         }else{
-            expressao.append(expressao.text)
-            resultado.append(string)
-            resultado.text = ""
+            expressao.append(txt_resultado.text)
+            expressao.append(string)
+            txt_resultado.text = ""
         }
     }
 

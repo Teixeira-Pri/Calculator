@@ -20,7 +20,7 @@
         android:textSize="40sp" />
 
     <TextView
-        android:id="@+id/resultado"
+        android:id="@+id/txt_resultado"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginEnd="10dp"
